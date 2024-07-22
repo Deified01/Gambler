@@ -5,6 +5,10 @@ from flask import Flask
 from telethon import events, TelegramClient, types
 from telethon.sessions import StringSession
 import os
+import uvloop
+
+# Set the event loop policy to uvloop
+asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 # Flask application setup
 app = Flask(__name__)
