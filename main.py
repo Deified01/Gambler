@@ -4,8 +4,6 @@ import logging
 from telethon import TelegramClient, events, types
 from telethon.sessions import StringSession
 from telethon.tl.functions.messages import GetBotCallbackAnswerRequest
-import nest_asyncio
-nest_asyncio.apply()
 from flask import Flask
 import threading
 import uvloop
