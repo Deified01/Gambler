@@ -8,7 +8,7 @@ from flask import Flask
 import threading
 import uvloop
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +19,7 @@ api_id = 28213805
 api_hash = '8f80142dfef1a696bee7f6ab4f6ece34'
 
 # Your StringSession
-string_session = '1BVtsOH8BuxaLelpLM9vLpwF6shu127rXyk2uRgpbRKEwHoIqLln3_khBr1reFGrXYj_dtr8c8NDRXw3RYnze5kcMIA0mxjNtbAnTxJ8rmTQmeG-qWuYo2JX6lp1VkfuxI64a1Jq_pKM62JVmyKn_E1hBRJg5KPs9-z-SmGTKsifibR9vBkc_21_URBGV8ajMuHgPdP8swhxhxIVhTMlrppwiy7ywMvMZ0w1OT9o6A9GtJHwP7IlP6vdCMAy6HOqQbXMW8RaK44tOTpF9OQd1hAUD8mUYbQsxSZq1udvWJrWN5hQMQeFFN-xRQNmyQN5cojhb1IZooItJwUZOjS6HYyWKktDHyuA='
+string_session = os.getenv("string")
 
 # Create a Telegram client using StringSession
 client = TelegramClient(StringSession(string_session), api_id, api_hash)
