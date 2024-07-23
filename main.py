@@ -24,6 +24,9 @@ string_session = '1BVtsOH8BuxaLelpLM9vLpwF6shu127rXyk2uRgpbRKEwHoIqLln3_khBr1reF
 # Create a Telegram client using StringSession
 client = TelegramClient(StringSession(string_session), api_id, api_hash)
 
+def to_alphanumeric(s):
+    return re.sub(r'[^a-zA-Z0-9]', '', s)
+
 @client.on(events.NewMessage(incoming=True, from_users=['@lustXcatcherrobot']))
 async def handle_message(event):
     # Check if the message is from a private chat
