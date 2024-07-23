@@ -60,9 +60,22 @@ async def handle_message(event):
 
 async def send_gamble_task():
     while True:
-        await client.send_message('@lustXcatcherrobot', '/gamble 100000000000')
+        await client.send_message('@lustXcatcherrobot', '/gamble 1000000000')
         logger.info("Sent /gamble 100")
         await asyncio.sleep(11.5)
+
+async def send_lever_message():
+    while True:
+        await client.send_message('@lustXcatcherrobot', '/lever 01')
+        await asyncio.sleep(612)
+
+@client.on(events.NewMessage(from_users='@lustXcatcherrobot'))
+async def handle_message(event):
+    message = event.message.message
+    alphanumeric_message = to_alphanumeric(message)
+    if 'Pleasebetatleast7ofyourbalancewhichis' in alphanumeric_message:
+        balance = alphanumeric_message.replace('Pleasebetatleast7ofyourbalancewhichis', '')
+        await client.send_message('@lustXcatcherrobot', f'/lever {balance}')
 
 app = Flask(__name__)
 
@@ -82,6 +95,7 @@ async def main():
     await client.start()
     logger.info("Client started. Listening for messages...")
     client.loop.create_task(send_gamble_task())
+    client.loop.create_task(send_lever_message())
     await client.run_until_disconnected()
 
 if __name__ == "__main__":
