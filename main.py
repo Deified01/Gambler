@@ -63,7 +63,7 @@ async def handle_message(event):
 
 async def send_gamble_task():
     while True:
-        await client.send_message('@lustXcatcherrobot', '/gamble 1500000')
+        await client.send_message('@lustXcatcherrobot', '/gamble 500000')
         logger.info("Sent /gamble 100")
         await asyncio.sleep(11.5)
 
@@ -77,7 +77,7 @@ async def send_riddle_message():
         await client.send_message('@lustXcatcherrobot', '/riddle')
         await asyncio.sleep(8)
 
-async def send_gamble_task():
+async def send_gyamble_task():
     while True:
         await client.send_message('@lustsupport', '/tesure')
         logger.info("Sent /gamble 100")
@@ -112,6 +112,7 @@ async def main():
     client.loop.create_task(send_gamble_task())
     client.loop.create_task(send_lever_message())
     client.loop.create_task(send_riddle_message())
+    client.loop.create_task(send_gyamble_task())
     await client.run_until_disconnected()
 
 if __name__ == "__main__":
