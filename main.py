@@ -65,7 +65,7 @@ async def send_gamble_task():
     while True:
         await client.send_message('@lustXcatcherrobot', '/gamble 500000')
         logger.info("Sent /gamble 100")
-        await asyncio.sleep(11.5)
+        await asyncio.sleep(12.8)
 
 async def send_lever_message():
     while True:
