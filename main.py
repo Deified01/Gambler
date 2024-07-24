@@ -20,7 +20,7 @@ api_hash = '8f80142dfef1a696bee7f6ab4f6ece34'
 
 # Your StringSession
 string_session = os.getenv("string")
-
+gamble = os.getenv("wet")
 # Create a Telegram client using StringSession
 client = TelegramClient(StringSession(string_session), api_id, api_hash)
 
@@ -63,7 +63,7 @@ async def handle_message(event):
 
 async def send_gamble_task():
     while True:
-        await client.send_message('@lustXcatcherrobot', '/gamble 3500000')
+        await client.send_message(f'@lustXcatcherrobot', '/gamble {gamble}')
         logger.info("Sent /gamble 100")
         await asyncio.sleep(12.8)
 
