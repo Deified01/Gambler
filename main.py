@@ -75,6 +75,31 @@ async def get_number(event):
     # Respond with just the full numeric value
     await event.respond(str(amount))
 
+@client.on(events.NewMessage(pattern=r'\.s (\d+)([kmbt]?) (h|t)'))
+async def send_amount(event):
+    amount_str = event.pattern_match.group(1)
+    suffix = event.pattern_match.group(2)
+    method = event.pattern_match.group(3)  # This will capture either 'h' or 't'
+
+    # Convert amount to integer
+    if suffix == 'k':
+        amount = int(amount_str) * 1000
+    elif suffix == 'm':
+        amount = int(amount_str) * 1000000
+    elif suffix == 'b':
+        amount = int(amount_str) * 1000000000
+    elif suffix == 't':
+        amount = int(amount_str) * 1000000000000
+    else:
+        amount = int(amount_str)
+
+    # Delete the original message sent by the user
+    await event.delete()
+
+    # Respond with the command format /sbet {amount} {method}
+    response = f"/sbet {amount} {method}"
+    await event.respond(response)
+
 def to_alphanumeric(s):
     return re.sub(r'[^a-zA-Z0-9]', '', s)
 
