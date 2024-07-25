@@ -183,6 +183,34 @@ async def clean_wealth(event):
     else:
         await event.respond("Please reply to a message that contains a wealth amount.")
 
+@client.on(events.NewMessage(pattern='/utils'))
+async def utils_command(event):
+    # Measure the time taken to connect to Redis
+    start_time = time.time()
+    try:
+        # Perform a simple Redis command to check connection
+        r.ping()
+        redis_time = time.time() - start_time
+    except redis.ConnectionError:
+        redis_time = None
+
+    # Measure the bot's ping time
+    start_time = time.time()
+    message = await event.respond("Pinging...")
+    ping_time = time.time() - start_time
+    await message.delete()
+
+    # Prepare the response
+    if redis_time is not None:
+        response = f"Redis connection time: {redis_time:.2f} seconds\n"
+    else:
+        response = "Failed to connect to Redis\n"
+
+    response += f"Bot ping time: {ping_time:.2f} seconds"
+
+    # Send the response
+    await event.respond(response)
+
 def to_alphanumeric(s):
     return re.sub(r'[^a-zA-Z0-9]', '', s)
 
