@@ -53,7 +53,7 @@ async def set_gamble_amount(event):
     await event.respond(f"Gamble amount set to {amount}")
 
 @client.on(events.NewMessage(pattern='/get (\d+)([kmbt]?)'))
-async def get_gamble_amount(event):
+async def get_number(event):
     amount_str = event.pattern_match.group(1)
     suffix = event.pattern_match.group(2)
     
@@ -69,7 +69,11 @@ async def get_gamble_amount(event):
     else:
         amount = int(amount_str)
 
-    await event.respond(f"{amount}")
+    # Delete the original message sent by the user
+    await event.delete()
+    
+    # Respond with just the full numeric value
+    await event.respond(str(amount))
 
 def to_alphanumeric(s):
     return re.sub(r'[^a-zA-Z0-9]', '', s)
