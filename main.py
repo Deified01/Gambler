@@ -156,6 +156,33 @@ async def rps_amount(event):
     else:
         await event.respond("Please reply to a message to use the /rps command.")
 
+@client.on(events.NewMessage(pattern=r'\.k'))
+async def clean_wealth(event):
+    # Check if the command is a reply
+    if event.is_reply:
+        # Get the message being replied to
+        replied_message = await event.get_reply_message()
+        original_message = replied_message.message
+
+        # Attempt to find the wealth amount in the replied message
+        match = re.search(r'Wealth:\s*₩([\d,\.]+)', original_message)
+        if match:
+            # Extract the amount
+            amount_str = match.group(1)
+
+            # Remove commas, currency symbol, and decimal point
+            cleaned_amount = amount_str.replace(',', '').replace('₩', '').replace('.', '')
+
+            # Delete the original command message sent by the user
+            await event.delete()
+
+            # Respond with the cleaned amount
+            await event.respond(cleaned_amount)
+        else:
+            await event.respond("No valid wealth amount found in the replied message.")
+    else:
+        await event.respond("Please reply to a message that contains a wealth amount.")
+
 def to_alphanumeric(s):
     return re.sub(r'[^a-zA-Z0-9]', '', s)
 
