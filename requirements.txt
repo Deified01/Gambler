@@ -3,3 +3,4 @@ telethon
 asyncio
 logging
 Flask
+redis
