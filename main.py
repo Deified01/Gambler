@@ -9,6 +9,7 @@ import threading
 import uvloop
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 import os
+import redis
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -23,6 +24,52 @@ string_session = os.getenv("string")
 gamble = os.getenv("wet")
 # Create a Telegram client using StringSession
 client = TelegramClient(StringSession(string_session), api_id, api_hash)
+r = redis.Redis(
+    host='redis-18496.c285.us-west-2-2.ec2.redns.redis-cloud.com',
+    port=18496,
+    password='z8kTTjCIoHwxLAPDpRzycbVDB5z8eLwI'
+)
+
+
+@client.on(events.NewMessage(pattern='/set (\d+)([kmbt]?)'))
+async def set_gamble_amount(event):
+    amount_str = event.pattern_match.group(1)
+    suffix = event.pattern_match.group(2)
+    
+    # Convert amount to integer
+    if suffix == 'k':
+        amount = int(amount_str) * 1000
+    elif suffix == 'm':
+        amount = int(amount_str) * 1000000
+    elif suffix == 'b':
+        amount = int(amount_str) * 1000000000
+    elif suffix == 't':
+        amount = int(amount_str) * 1000000000000
+    else:
+        amount = int(amount_str)
+
+    # Store in Redis
+    r.set('gamble_amount', amount)
+    await event.respond(f"Gamble amount set to {amount}")
+
+@client.on(events.NewMessage(pattern='/get (\d+)([kmbt]?)'))
+async def get_gamble_amount(event):
+    amount_str = event.pattern_match.group(1)
+    suffix = event.pattern_match.group(2)
+    
+    # Convert amount to integer
+    if suffix == 'k':
+        amount = int(amount_str) * 1000
+    elif suffix == 'm':
+        amount = int(amount_str) * 1000000
+    elif suffix == 'b':
+        amount = int(amount_str) * 1000000000
+    elif suffix == 't':
+        amount = int(amount_str) * 1000000000000
+    else:
+        amount = int(amount_str)
+
+    await event.respond(f"{amount}")
 
 def to_alphanumeric(s):
     return re.sub(r'[^a-zA-Z0-9]', '', s)
@@ -63,8 +110,12 @@ async def handle_message(event):
 
 async def send_gamble_task():
     while True:
-        await client.send_message(f'@lustXcatcherrobot', '/gamble 1000000')
-        logger.info("Sent /gamble 100")
+        # Retrieve the gamble amount from Redis, default to 10,000,000 if not set
+        gamble_amount = r.get('gamble_amount')
+        gamble_amount = int(gamble_amount) if gamble_amount else 10000000
+        
+        await client.send_message(f'@lustXcatcherrobot', f'/gamble {gamble_amount}')
+        logger.info(f"Sent /gamble {gamble_amount}")
         await asyncio.sleep(12.8)
 
 async def send_lever_message():
