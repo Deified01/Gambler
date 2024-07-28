@@ -301,9 +301,9 @@ async def main():
     await client.start()
     logger.info("Client started. Listening for messages...")
     client.loop.create_task(send_gamble_task())
-    client.loop.create_task(send_lever_message())
+    #client.loop.create_task(send_lever_message())
     client.loop.create_task(send_riddle_message())
-    client.loop.create_task(send_gyamble_task())
+    #client.loop.create_task(send_gyamble_task())
     await client.run_until_disconnected()
 
 if __name__ == "__main__":
